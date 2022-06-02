@@ -8,6 +8,7 @@ import rospy
 import roslib
 import numpy as np
 import datetime
+import struct
 
 from std_msgs.msg import Float32
 
@@ -17,24 +18,41 @@ class serial_:
     def __init__(self):
         self.ser = serial.Serial("/dev/ttyACM0", 115200, timeout=3)
         self.rec_flag = False
-        self.rec_data = [0]*13
         self.rec_count = 0
+        self.max_rec_count = 13
+        self.idx = self.max_rec_count + 1
+        self.rec_data = [0.0]*13
+        self.pre_data = []
+        self.odom = [0.0]*3
 
     def read_data(self):
-        line = self.ser.read(13)
-        tmp = np.frombuffer(line, dtype=np.uint8, count=-1)
-        #tmp = int(tmp)
-        print(tmp.astype(np.uint8))
+        buffer = self.ser.read(self.max_rec_count)
+        tmp = np.frombuffer(buffer, dtype=np.uint8, count=-1)
+        tmp = tmp.tolist()
+        if 255 in tmp:
+            self.idx = tmp.index(255)
+            if self.idx != self.max_rec_count + 1:
+                now_tmp = tmp[self.idx:]
+                self.rec_data = bytearray(now_tmp + self.pre_data)
+                # print(now_tmp)
+                # print(self.pre_data)
+                # print("rec")
+                # print(self.rec_data)
+                self.convert_data()
 
-        # if tmp[0] == 255:
-        #     if self.rec_count == 0 or self.rec_count == 7:
-        #         self.rec_flag = True
-        #     else:
-        #         self.rec_flag = False
+                self.pre_data = tmp[:self.idx]
+            elif self.idx == 0:
+                self.rec_data = tmp
+                self.convert_data()
+        else:
+            self.idx = self.max_rec_count + 1
 
-        # if self.rec_flag == True:
-        #     self.rec_data[self.rec_count] = tmp
-        #     self.rec_count += 1
+    def convert_data(self):
+        print(self.rec_data)
+        self.odom[0] = self.rec_data[1]<<24 | self.rec_data[2]<<16 | self.rec_data[3]<<8 | self.rec_data[4]
+        #self.odom[1] = self.rec_data[5]<<24 | self.rec_data[6]<<16 | self.rec_data[7]<<8 | self.rec_data[8]
+        #self.odom[2] = self.rec_data[9]<<24 | self.rec_data[10]<<16 | self.rec_data[11]<<8 | self.rec_data[12]
+        print(self.odom)
             
 if __name__ == '__main__':
     try:
