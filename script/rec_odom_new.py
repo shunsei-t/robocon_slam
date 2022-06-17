@@ -11,10 +11,11 @@ import datetime
 import struct
 
 from std_msgs.msg import Float32
+from geometry_msgs.msg import PoseWithCovarianceStamped
 
 import tf
 
-class serial_:
+class rec_odom:
     def __init__(self):
         self.ser = serial.Serial("/dev/ttyACM0", 115200, timeout=3)
         self.rec_flag = False
@@ -22,7 +23,9 @@ class serial_:
         self.max_rec_count = 13
         self.idx = self.max_rec_count + 1
         self.pre_data = []
-        self.odom = [0.0]*3
+        self.odom_speed_speed = [0.0]*3
+        self.initial_odom = [0.0]*3
+        self.br = tf.TransformBroadcaster()
 
     def read_data(self):
         buffer = self.ser.read(self.max_rec_count)
@@ -54,22 +57,44 @@ class serial_:
         b = struct.pack('I', rec_data[8]<<24 | rec_data[7]<<16 | rec_data[6]<<8 | rec_data[5])
         c = struct.pack('I', rec_data[12]<<24 | rec_data[11]<<16 | rec_data[10]<<8 | rec_data[9])
         #struct.unpack('f', a)だと(n,)という形で出てくるので、listにして一番目を取り出し
-        self.odom[0] = list(struct.unpack('f', a))[0]
-        self.odom[1] = list(struct.unpack('f', b))[0]
-        self.odom[2] = list(struct.unpack('f', c))[0]
-        print(self.odom)
+        self.odom_speed[0] = list(struct.unpack('f', a))[0]
+        self.odom_speed[1] = list(struct.unpack('f', b))[0]
+        self.odom_speed[2] = list(struct.unpack('f', c))[0]
+        print(self.odom_speed)
+
+    def initialize_tf(self, data):
+        q = tf.transformations.euler_from_quaternion((data.pose.pose.orientation.x,
+                                                    data.pose.pose.orientation.y,
+                                                    data.pose.pose.orientation.z,
+                                                    data.pose.pose.orientation.w))
+        self.initial_odom = [data.pose.pose.position.x, data.pose.pose.position.y, q[2]]
+        print("initialize", self.initial_odom)
+
             
 if __name__ == '__main__':
     try:
         rospy.init_node('rec_odom', anonymous=True)
-        r = rospy.Rate(10)
-        myserial = serial_()
+        Hz = 10.0
+        dt = 1.0/Hz
+        r = rospy.Rate(Hz)
+        myodom = rec_odom()
+
+        rospy.Subscriber("initialpose", PoseWithCovarianceStamped, myodom.initialize_tf)
 
         while not rospy.is_shutdown():
-            myserial.read_data()
+            myodom.read_data()
+
+            next_odom = myodom.initial_odom + dt*myodom.odom_speed
+
+            myodom.br.sendTransform((next_odom[0], next_odom[1], 0),
+                            tf.tranfomations.quaternion_from_euler(0, 0, next_odom[2]),
+                            rospy.Time.now(),
+                            "odom",
+                            "map")
+
             r.sleep()
 
 
     except rospy.ROSInterruptException:
-        ser.close()
+        myodom.ser.close()
         pass
