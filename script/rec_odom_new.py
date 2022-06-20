@@ -81,20 +81,21 @@ if __name__ == '__main__':
 
         rospy.Subscriber("initialpose", PoseWithCovarianceStamped, myodom.initialize_tf)
 
-        while not rospy.is_shutdown():
-            myodom.read_data()
+        try:
+            while not rospy.is_shutdown():
+                myodom.read_data()
 
-            next_odom = myodom.initial_odom + dt*myodom.odom_speed
+                next_odom = myodom.initial_odom + dt*myodom.odom_speed
 
-            myodom.br.sendTransform((next_odom[0], next_odom[1], 0),
-                            tf.tranfomations.quaternion_from_euler(0, 0, next_odom[2]),
-                            rospy.Time.now(),
-                            "odom",
-                            "map")
+                myodom.br.sendTransform((next_odom[0], next_odom[1], 0),
+                                tf.tranfomations.quaternion_from_euler(0, 0, next_odom[2]),
+                                rospy.Time.now(),
+                                "odom",
+                                "map")
 
-            r.sleep()
-
+                r.sleep()
+        except KeyboardInterrupt:
+            myodom.ser.close()
 
     except rospy.ROSInterruptException:
-        myodom.ser.close()
         pass
