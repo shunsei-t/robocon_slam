@@ -37,5 +37,6 @@ if __name__ == '__main__':
                 r.sleep()
             except KeyboardInterrupt:
                 mypose.ser.close()
+                
     except rospy.ROSInterruptException:
         pass
