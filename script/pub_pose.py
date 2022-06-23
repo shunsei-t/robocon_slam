@@ -17,7 +17,7 @@ class pub_pose:
         self.vel[3] = data.angular.z
 
     def write(self):
-        self.ser.
+        self.ser.write("a")
         
 
 if __name__ == '__main__':
@@ -35,7 +35,7 @@ if __name__ == '__main__':
                 mypose.write()
 
                 r.sleep()
-            except KeyboardInterrupt:
-                mypose.ser.close()
+        except KeyboardInterrupt:
+            mypose.ser.close()
     except rospy.ROSInterruptException:
         pass
