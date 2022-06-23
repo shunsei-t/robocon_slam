@@ -1,9 +1,12 @@
+#!/usr/bin/env python
+# coding: UTF-8
+
 from __future__ import print_function
 
 import rospy
 import serial
 import struct
-from geometry_msgs import Twist
+from geometry_msgs.msg import Twist
 
 class pub_pose:
     def __init__(self):
@@ -22,7 +25,7 @@ class pub_pose:
 
 if __name__ == '__main__':
     try:
-        rospy.init_node('pub_pose.py', anonymous=True)
+        rospy.init_node('pub_pose', anonymous=True)
         Hz = 20
         r = rospy.Rate(Hz)
 
