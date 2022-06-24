@@ -20,7 +20,10 @@ class pub_pose:
         self.vel[3] = data.angular.z
 
     def write(self):
-        self.ser.write("a")
+        data = 0.01
+        tmp = struct.pack('b', data)
+        tmp1 = tmp >> 24
+        self.ser.write(tmp)
         
 
 if __name__ == '__main__':
