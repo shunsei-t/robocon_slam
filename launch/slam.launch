@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="rvizconfig" default="$(find robocon_slam)/rviz/robocon_slam.rviz" />
+
+    <!-- amcl -->
+    <node pkg="map_server" type="map_server" name="map_server" args="$(find robocon_slam)/map/map.yaml">
+        <param name="frame_id" value="map"/>
+    </node>
+    <node pkg="amcl" type="amcl" name="amcl" clear_params="true">
+        <rosparam command="load" file="$(find robocon_slam)/config/amcl.yaml" />
+        <param name="base_frame_id" value="base_link" />
+        <param name="odom_frame_id" value="odom" />
+        <param name="global_frame_id" value="map" />
+        <remap from="scan" to="scan" />
+    </node>
+
+    <!-- rviz -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>

@@ -15,7 +15,7 @@ from geometry_msgs.msg import PoseWithCovarianceStamped
 
 import tf
 
-class rec_odom:
+class RecOdom:
     def __init__(self):
         self.ser = serial.Serial("/dev/ttyACM0", 115200, timeout=3)
         self.rec_flag = False
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         Hz = 10.0
         dt = 1.0/Hz
         r = rospy.Rate(Hz)
-        myodom = rec_odom()
+        myodom = RecOdom()
 
         rospy.Subscriber("initialpose", PoseWithCovarianceStamped, myodom.initialize_tf)
 

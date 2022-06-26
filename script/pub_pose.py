@@ -8,7 +8,7 @@ import serial
 import struct
 from geometry_msgs.msg import Twist
 
-class pub_pose:
+class PubPose:
     def __init__(self):
         self.ser = serial.Serial("/dev/ttyACM0", 115200, timeout=3)
         self.vel = [0.0]*3
@@ -36,7 +36,7 @@ if __name__ == '__main__':
         Hz = 10
         r = rospy.Rate(Hz)
 
-        mypose = pub_pose()
+        mypose = PubPose()
 
         rospy.Subscriber("cmd_vel", Twist, mypose.vel_CB)
 
