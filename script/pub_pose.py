@@ -20,16 +20,20 @@ class pub_pose:
         self.vel[3] = data.angular.z
 
     def write(self):
-        data = 0.01
-        tmp = struct.pack('b', data)
-        tmp1 = tmp >> 24
-        self.ser.write(tmp)
-        
+        data = [0.01, 0.02, -0.01]
+        tmp = struct.pack('fff', data[0], data[1], data[2])
+        tmp = struct.unpack('B'*12, tmp)
+        #print('send data 255+ ', end = '')
+        #print(tmp)
+        self.ser.write(255)
+        for d in tmp:
+            self.ser.write(d)
+
 
 if __name__ == '__main__':
     try:
         rospy.init_node('pub_pose', anonymous=True)
-        Hz = 20
+        Hz = 10
         r = rospy.Rate(Hz)
 
         mypose = pub_pose()
