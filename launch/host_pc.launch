@@ -16,4 +16,7 @@
 
     <!-- rviz -->
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+    <node name="pure_pursuit" pkg="robocon_slam" type="pure_pursuit.py"/>
+    
 </launch>

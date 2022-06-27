@@ -106,6 +106,28 @@ Visualization Manager:
         {}
       Update Interval: 0
       Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /path_marker
+      Name: MarkerArray
+      Namespaces:
+        "": true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -134,25 +156,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 10.973756790161133
+      Distance: 9.895984649658203
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 2.4231371879577637
-        Y: 1.3291186094284058
-        Z: -2.1305618286132812
+        X: 1.8554348945617676
+        Y: 1.7178789377212524
+        Z: -1.7900731563568115
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 0.7297973036766052
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0
+      Yaw: 0.6149998903274536
     Saved: ~
 Window Geometry:
   Displays:
@@ -170,5 +192,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1536
-  X: 1536
-  Y: 116
+  X: 1544
+  Y: 124
