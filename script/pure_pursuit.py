@@ -16,41 +16,22 @@ def line_create(num=0, x1=0, y1=0, z1=0, x2=0, y2=0, z2=0, r=0, g=0, b=0, a=1.0,
     marker_data.header.frame_id = "map"
     marker_data.header.stamp = rospy.Time.now()
     marker_data.id = num
-    marker_data.action = Marker.ADD
-    marker_data.type = marker_data.LINE_STRIP
+    marker_data.action = Marker.SPHERE
+    marker_data.type = Marker.CUBE
 
-    # marker_data.pose.position.x = x
-    # marker_data.pose.position.y = y
-    # marker_data.pose.position.z = z
-
-    # marker_data.pose.orientation.x = 0.0
-    # marker_data.pose.orientation.y = 0.0
-    # marker_data.pose.orientation.z = 1.0
-    # marker_data.pose.orientation.w = 0.0
-
-    marker_data.color.r = r
-    marker_data.color.g = g
-    marker_data.color.b = b
-    marker_data.color.a = a
-
-    marker_data.scale.x = scale
-    marker_data.scale.y = scale
-    marker_data.scale.z = scale
-
-    # marker line points
-    marker_data.points = []
-    # first point
-    first_line_point = Point()
-    first_line_point.x = x1
-    first_line_point.y = y1
-    first_line_point.z = z1
-    marker_data.points.append(first_line_point)
-    # second point
-    second_line_point = Point()
-    second_line_point.x = x2
-    second_line_point.y = y2
-    second_line_point.z = z2
-    marker_data.points.append(second_line_point)
+    marker_data.scale.x = 0.1
+    marker_data.scale.y = 0.1
+    marker_data.scale.z = 0.1
+    marker_data.pose.position.x = 0
+    marker_data.pose.position.y = 0
+    marker_data.pose.position.z = 0
+    marker_data.pose.orientation.x = 0
+    marker_data.pose.orientation.y = 0
+    marker_data.pose.orientation.z = 0
+    marker_data.pose.orientation.w = 1
+    marker_data.color.g = 1.0
+    marker_data.color.b = 0.0
+    marker_data.color.a = 1.0
 
     return marker_data
 
