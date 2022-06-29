@@ -73,8 +73,10 @@ class Pursuit:
         self.remarkable_point = np.argmin(d)
 
         if self.remarkable_point <= len(self.path)-2:
-            self.vel[0] = self.vel_gain*(self.path[self.remarkable_point + 1, 0] - self.pose[0])
-            self.vel[1] = self.vel_gain*(self.path[self.remarkable_point + 1, 1] - self.pose[1])
+            if d[self.remarkable_point] < self.dlimit:
+                self.remarkable_point += 1
+            self.vel[0] = self.vel_gain*(self.path[self.remarkable_point, 0] - self.pose[0])
+            self.vel[1] = self.vel_gain*(self.path[self.remarkable_point, 1] - self.pose[1])
             if self.vel[0] > self.max_vel:
                 self.vel[0] = self.max_vel
             if self.vel[1] > self.max_vel:

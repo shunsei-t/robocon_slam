@@ -85,10 +85,11 @@ if __name__ == '__main__':
             while not rospy.is_shutdown():
                 myodom.read_data()
 
+                #取得した速度から、map座標に対するロボットのオドメトリ位置を計算
                 next_odom = [0.0]*3
-                next_odom[0] = myodom.initial_odom[0] + dt*myodom.odom_speed[0]
-                next_odom[1] = myodom.initial_odom[1] + dt*myodom.odom_speed[1]
-                next_odom[2] = myodom.initial_odom[2] + dt*myodom.odom_speed[2]
+                next_odom[2] = myodom.initial_odom[2] + dt*myodom.odom_speed[2]#yaw角
+                next_odom[0] = myodom.initial_odom[0] + dt*(myodom.odom_speed[0]*np.cos(next_odom[2]) - myodom.odom_speed[1]*np.sin(next_odom[2]))
+                next_odom[1] = myodom.initial_odom[1] + dt*(myodom.odom_speed[0]*np.sin(next_odom[2]) + myodom.odom_speed[1]*np.cos(next_odom[2]))
                 #print(type(myodom.initial_odom[0]))
 
                 myodom.br.sendTransform((next_odom[0], next_odom[1], 0),
