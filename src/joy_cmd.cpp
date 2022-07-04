@@ -23,18 +23,10 @@ public:
     int assign_z = 5;
     int assign_circle = 2;
     int assign_cross = 1;
-    pnh_.getParam("assign_x", assign_x);
-    pnh_.getParam("assign_y", assign_y);
-    pnh_.getParam("assign_z", assign_z);
-    pnh_.getParam("assign_o", assign_circle);
-    pnh_.getParam("assign_x", assign_cross);
 
     float max_x = 0.3;
     float max_y = 0.3;
     float max_z = 1.0;
-    pnh_.getParam("max_x", max_x);
-    pnh_.getParam("max_y", max_y);
-    pnh_.getParam("max_z", max_z);
 
     geometry_msgs::Twist cmd_vel;
   
