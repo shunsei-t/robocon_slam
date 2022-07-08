@@ -20,7 +20,7 @@ class PubPose:
         self.vel[3] = data.angular.z
 
     def write(self):
-        data = [0.01, 0.02, -0.01]
+        data = [0.01, -0.1, -0.01]
         tmp = struct.pack('fff', data[0], data[1], data[2])
         tmp = struct.unpack('B'*12, tmp)
         #print('send data 255+ ', end = '')
@@ -28,6 +28,9 @@ class PubPose:
         self.ser.write(255)
         for d in tmp:
             self.ser.write(d)
+        for i in range(12):
+            sum = tmp[i]
+        self.ser.write(sum)
 
 
 if __name__ == '__main__':
